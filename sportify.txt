@@ -1,0 +1,13 @@
+comment 1 =======================> many likes 
+id , comment_id , user_id , liketype  
+=================================================
+
+
+
+
+
+
+
+reel 1 =========================> many reelslikes
+id , reel_id , user_id , liketype 
+=================================================
