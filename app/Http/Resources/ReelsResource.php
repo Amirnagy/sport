@@ -19,11 +19,11 @@ class ReelsResource extends JsonResource
                 "user_id" => $this->user_id,
                 "description" => $this->description,
                 "video_path" => env('APP_URL').'/public/'.$this->video_path,
+                "cover" => $this->cover ? env('APP_URL') . '/public/' . $this->cover : null,
                 "likes" => $this->likes,
                 "views" => $this->views,
                 "created_at" => $this->created_at->format('Y-m-d H:i:s'),
                 "updated_at" => $this->updated_at->format('Y-m-d H:i:s'),
-                
             ];
 
         // return parent::toArray($request);

@@ -25,11 +25,7 @@ class DatabaseSeeder extends Seeder
         // FootballPe::factory(50)->create();
         // Reel::factory(300)->create();
         // Comment::factory(250)->create();
-        // User::factory(100)->create();
+        User::factory(100)->create();
         // CommentLike::factory(10)->create();
-
-
-
-
     }
 }

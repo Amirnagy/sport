@@ -16,14 +16,7 @@ class Reel extends Model
 
 
 
-    protected $fillable=[
-        'user_id',
-        'description',
-        'video_path',
-        'cover',
-        'views',
-        'likes',
-    ];
+    protected $fillable=['user_id','description','video_path','cover','views','likes'];
 
     public function user(): BelongsTo
     {
@@ -34,24 +27,6 @@ class Reel extends Model
     {
         return $this->hasMany(Comment::class);
     }
-
-    public function scopeUsers(Builder $query,$user_id): void
-    {
-        $query->where('user_id', '=', $user_id);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -76,5 +51,24 @@ class Reel extends Model
             'video' => 'sometimes|mimetypes:video/mp4,video/quicktime,video/mpeg,video/3gpp|max:100480',
             'cover' => 'sometimes|mimetypes:image/jpeg,image/png,image/gif|max:20480',
         ];
+    }
+
+
+
+
+    public static function prepareReelData($user ,array $data,string $videopath, $pathcover = null){
+        return [
+            'user_id' => $user->id,
+            'description' => $data['description'],
+            'video_path' => $videopath,
+            'cover' => $pathcover ?? null,
+        ];
+    }
+
+
+
+    public function scopeUserOfReel(Builder $query,$user,$request): void
+    {
+        $query->where('user_id', $user->id)->where('id',$request->id);
     }
 }

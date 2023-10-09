@@ -49,31 +49,35 @@ class Comment extends Model
             'content' => 'required|string',
         ];
     }
+
+    public static function updateRules()
+    {
+        return
+        [
+            'idcomment' => 'required|integer|exists:comments,id',
+            'idreel' => 'required|integer|exists:comments,reel_id',
+            'content' => 'required|string',
+        ];
+    }
+
+
+
     public static function replayRules()
     {
         return
         [
-            'reel_id' => 'required|integer|exists:comments,reel_id',
             'id' => 'required|integer|exists:comments,id',
-
+            'reel_id' => 'required|integer|exists:comments,reel_id',
         ];
     }
     public static function createReplayRules()
     {
         return
         [
-            'reel_id' => 'required|integer|exists:comments,reel_id',
             'id' => 'required|integer|exists:comments,id',
+            'reel_id' => 'required|integer|exists:comments,reel_id',
             'content' => 'required|string',
         ];
     }
-    public static function updateRules()
-    {
-        return
-        [
-            'idreel' => 'required|integer|exists:comments,reel_id',
-            'idcomment' => 'required|integer|exists:comments,id',
-            'content' => 'required|string',
-        ];
-    }
+
 }

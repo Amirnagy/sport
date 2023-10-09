@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'checkpeprofile' => \App\Http\Middleware\CheckPeProfile::class,
         'checkcouchprofile' => \App\Http\Middleware\CheckCouchProfile::class,
         'checkplayerprofile' => \App\Http\Middleware\CheckPlayerProfile::class,
+        'checkviewreel' => \App\Http\Middleware\CheckViewReel::class,
     ];
 }

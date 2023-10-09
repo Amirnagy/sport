@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comment_reports', function (Blueprint $table) {
+        Schema::create('reel_views', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('comment_id')->references('id')->on('comments')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('reel_id')->references('id')->on('reels')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->text('report');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unique(['reel_id','user_id']);
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comment_reports');
+        Schema::dropIfExists('reel_views');
     }
 };

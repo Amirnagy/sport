@@ -82,13 +82,13 @@ Route::group(['middleware'=>'auth','prefix'=>'profile/reels'],function () {
 
 
 Route::group(['middleware'=>'auth','prefix'=>'reels/{id}'],function () {
-    Route::get('view',[ReelsController::class,'viewReels']);
-    Route::post('like',[ReelsController::class,'likeReels']);
-    Route::post('unlike',[ReelsController::class,'unlikeReels']);
-    Route::post('save',[ReelsController::class,'saveReels']);
-    Route::post('unsave',[ReelsController::class,'unsaveReels']);
-    Route::post('share',[ReelsController::class,'shareReels']);
-    Route::post('report',[ReelsController::class,'reportReel']);
+    Route::post('view',[ReelsController::class,'viewReel'])->middleware('checkviewreel'); // working
+    Route::post('like',[ReelsController::class,'likeReels']); // finshed
+    Route::delete('unlike',[ReelsController::class,'unlikeReels']); // finshed
+    Route::post('save',[ReelsController::class,'saveReels']); // finshed
+    Route::delete('unsave',[ReelsController::class,'unsaveReels']); // finshed
+    // Route::post('share',[ReelsController::class,'shareReels']); // working
+    Route::post('report',[ReelsController::class,'reportReel']); // working
     Route::get('comments',[ReelsController::class,'viewComentOnReels']); // finshed
 
 });

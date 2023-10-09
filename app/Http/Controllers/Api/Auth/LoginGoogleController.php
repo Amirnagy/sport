@@ -21,6 +21,7 @@ class LoginGoogleController extends Controller
         if(!$providerUser)
         {
             return $this->error('error fetching the data ,token invailed');
+
         }
 
             $userProviderId = $providerUser->id;

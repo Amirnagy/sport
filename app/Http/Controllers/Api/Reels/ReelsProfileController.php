@@ -21,47 +21,36 @@ class ReelsProfileController extends Controller
     {
         $user = $request->user('api');
         $data = $request->validate(Reel::rules());
-
         $file = $request->file('video');
         $cover = $request->file('cover');
-
         try {
-            $path = HelpersFunctions::storeFile($file,'reels');
+            $videopath = HelpersFunctions::storeFile($file,'reels');
             if($cover)
             {
                 $pathcover = HelpersFunctions::storeFile($cover,'reels/cover');
             }
-            $create = Reel::create([
-                'user_id' => $user->id,
-                'description' => $data['description'],
-                'video_path' => $path,
-                'cover' => $pathcover ?? null,
-            ]);
+            // create db reel
 
-            if($create && $path)
-        {
-            return $this->finalResponse('success',200,'data created successfully');
-        }
+            $create = Reel::create(Reel::prepareReelData($user, $data, $videopath ,$pathcover ?? null));
+
+            if($create && $videopath)
+            {
+                return $this->finalResponse('success',200,'data created successfully');
+            }
         } catch (\Throwable $th) {
             return $this->finalResponse('error', 500,null,null, 'An error occurred while storing data' .$th->getMessage());
         }
     }
 
-    /**
-     * updateProfileReel
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function updateProfileReel(Request $request)
     {
         $user = $request->user('api');
-
         // get data from requset
         $data = $request->validate(Reel::updateRules());
         $video = $request->file('video_path');
         $cover = $request->file('cover');
         // get reel
-        $reel = Reel::where('user_id',$user->id)->where('id',$request->id)->first();
+        $reel = Reel::UserReel($user->id,$request)->first();
         if(!$reel){
             return $this->finalResponse('failed',400,null,null,"can't update this element");
         }
@@ -69,20 +58,22 @@ class ReelsProfileController extends Controller
             $reel->update(['description' => $data['description']]);
 
             $video = HelpersFunctions::deleteFiles($video,$reel,'video_path','reels','cv');
-            if($video){ $reel->update(['views' => 0,'likes' => 0]);}
+            if($video){
+                $reel->update(['views' => 0,'likes' => 0]);
+            }
 
             $cover = HelpersFunctions::deleteFiles($cover,$reel,'cover','reels/cover','cv');
 
                 return $this->finalResponse('success',200,'data created successfully');
 
         } catch (\Throwable $th) {
-            return $this->finalResponse('error', 500,null,null, 'An error occurred while storing data' .$th->getMessage());
+            return $this->finalResponse('error', 500,null,null, 'An error occurred while storing data ' .$th->getMessage());
         }
     }
 
 
 
-    // read profile reel
+    // view all profile reels
     public function viewProfileReels(Request $request)
     {
         $user = $request->user('api');
@@ -92,22 +83,23 @@ class ReelsProfileController extends Controller
 
             $pagination = HelpersFunctions::pagnationResponse($reels);
 
-        return $reels ?
+        return $reels->items() ?
             $this->finalResponse('success',200,ReelsResource::collection($reels->items()),$pagination) :
             $this->finalResponse('success',204,'no data found');
 
         } catch (\Throwable $th) {
-            return $this->finalResponse('failed',500,null,null,'somthing happen in server'.$th->getMessage());
+            return $this->finalResponse('failed',500,null,null,'somthing happen in server '.$th->getMessage());
         }
 
     }
 
 
-    // delete
+    // delete one reel
     public function deleteProfileReels(Request $request)
     {
         $user = $request->user('api');
-        $reel = Reel::where('user_id',$user->id)->where('id',$request->id)->first();
+        $reel = Reel::UserReel($user->id, $request)->first();
+
         if(!$reel){
             return $this->finalResponse('failed',400,null,null,"can't delete this element");
         }
@@ -119,7 +111,7 @@ class ReelsProfileController extends Controller
     public function forceDeleteProfileReels(Request $request,$id)
     {
         $user = $request->user('api');
-        $reel = Reel::where('user_id',$user->id)->where('id',$request->id)->withTrashed()->first();
+        $reel = Reel::UserReel($user->id,$request)->withTrashed()->first();
         if(!$reel){
             return $this->finalResponse('failed',400,null,null,"can't delete this element");
         }

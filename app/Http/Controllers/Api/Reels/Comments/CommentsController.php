@@ -12,11 +12,6 @@ use App\Http\Controllers\Controller;
 
 class CommentsController extends Controller
 {
-
-
-    /**
-     * Store a one comment for reel .
-     */
     public function storeComment(Request $request)
     {
         $request->merge(['idreel'=>$request->idreel]);
@@ -30,10 +25,6 @@ class CommentsController extends Controller
         ]);
         return $this->finalResponse('success',200,$comment,null);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function updateComment(Request $request)
     {
         $request->merge(['idreel'=>$request->idreel,'idcomment'=>$request->idcomment]);
@@ -47,8 +38,6 @@ class CommentsController extends Controller
             return $this->finalResponse('failed',500,null,null,'some thing happen in the server'. $th);
         }
     }
-
-
     public function deleteComment(Request $request)
     {
         $request->merge(['idreel'=>$request->idreel,'idcomment'=>$request->idcomment]);
@@ -209,7 +198,5 @@ class CommentsController extends Controller
             return $this->finalResponse('failed',500,null,null,'somthing happen in server'.$th->getMessage().'please contact to backeknd');
         }
     }
-
-
 
 }

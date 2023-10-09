@@ -88,6 +88,16 @@ class HelpersFunctions
         ];
     }
 
+    /**
+     * return true if update successfully
+     *
+     * @param [type] $file
+     * @param [type] $model
+     * @param string $attributename
+     * @param string $diskstore
+     * @param string $diskdelete
+     * @return boolean
+     */
     public static function deleteFiles($file, $model,string $attributename,string $diskstore, string $diskdelete) : bool
     {
         if($file){

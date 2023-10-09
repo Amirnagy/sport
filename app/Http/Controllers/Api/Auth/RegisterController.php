@@ -47,6 +47,7 @@ class RegisterController extends Controller
         $user = User::create([
             'name' => $request->name,
             'username' => $username,
+            'avatar' => env('APP_URL').'/public/profile/default.jpg',
             'email' => $request->email,
             'password' => $request->password,
             'phone' => $request->phone ,
