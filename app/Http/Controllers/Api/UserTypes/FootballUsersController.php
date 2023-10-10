@@ -20,11 +20,12 @@ class FootballUsersController extends Controller
 
         $role = $user->role;
         try {
-            if($role == 'no_role')
+        if( $role == 'no_role' || $role == null )
+            {
+                return $this->finalResponse('failed',400,null,null,"you didn't compolete his profile , please complete it");
+            }
+        switch ($role)
         {
-            return $this->finalResponse('failed',400,null,null,"you didn't compolete his profile , please complete it");
-        }
-        switch ($role) {
             case 'player':
                 $profile = $user->player;
                 break;
@@ -33,10 +34,8 @@ class FootballUsersController extends Controller
                 break;
             case 'pe':
                 $profile = $user->pe;
-
                 break;
             default :
-
         }
         $request->merge(['role'=>$role]);
 

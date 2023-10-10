@@ -17,9 +17,7 @@ class CheckViewReel extends AbstractMiddlewareResponse
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        $request->validate([
-            'id' => 'exists:reels,id'
-        ]);
+        $request->validate(['id' => 'exists:reels,id']);
         $reel_id = $request->id;
         $reel = ReelView::where('reel_id',$reel_id)->where('user_id',$user->id)->first();
         if (!$reel) {

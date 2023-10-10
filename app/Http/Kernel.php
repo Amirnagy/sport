@@ -70,5 +70,7 @@ class Kernel extends HttpKernel
         'checkcouchprofile' => \App\Http\Middleware\CheckCouchProfile::class,
         'checkplayerprofile' => \App\Http\Middleware\CheckPlayerProfile::class,
         'checkviewreel' => \App\Http\Middleware\CheckViewReel::class,
+        'checkreelexist' => \App\Http\Middleware\CheckReelExist::class,
+        'checkidexist' => \App\Http\Middleware\CheckReelExist::class,
     ];
 }

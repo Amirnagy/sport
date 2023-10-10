@@ -47,31 +47,26 @@ class ReelsProfileController extends Controller
         $user = $request->user('api');
         // get data from requset
         $data = $request->validate(Reel::updateRules());
+
         $video = $request->file('video_path');
         $cover = $request->file('cover');
         // get reel
-        $reel = Reel::UserReel($user->id,$request)->first();
-        if(!$reel){
-            return $this->finalResponse('failed',400,null,null,"can't update this element");
-        }
         try {
+            $reel = Reel::userOfReel($user,$request)->first();
+            if(!$reel){
+                return $this->finalResponse('failed',400,null,null,"can't update this element");
+            }
             $reel->update(['description' => $data['description']]);
-
             $video = HelpersFunctions::deleteFiles($video,$reel,'video_path','reels','cv');
             if($video){
                 $reel->update(['views' => 0,'likes' => 0]);
             }
-
             $cover = HelpersFunctions::deleteFiles($cover,$reel,'cover','reels/cover','cv');
-
                 return $this->finalResponse('success',200,'data created successfully');
-
         } catch (\Throwable $th) {
-            return $this->finalResponse('error', 500,null,null, 'An error occurred while storing data ' .$th->getMessage());
+            return $this->finalResponse('error', 500,null,null, 'An error occurred while update data ' .$th->getMessage()).'contact to backend';
         }
     }
-
-
 
     // view all profile reels
     public function viewProfileReels(Request $request)
@@ -93,12 +88,11 @@ class ReelsProfileController extends Controller
 
     }
 
-
     // delete one reel
     public function deleteProfileReels(Request $request)
     {
         $user = $request->user('api');
-        $reel = Reel::UserReel($user->id, $request)->first();
+        $reel = Reel::userOfReel($user, $request)->first();
 
         if(!$reel){
             return $this->finalResponse('failed',400,null,null,"can't delete this element");
@@ -111,16 +105,15 @@ class ReelsProfileController extends Controller
     public function forceDeleteProfileReels(Request $request,$id)
     {
         $user = $request->user('api');
-        $reel = Reel::UserReel($user->id,$request)->withTrashed()->first();
+        $reel = Reel::userOfReel($user,$request)->withTrashed()->first();
         if(!$reel){
             return $this->finalResponse('failed',400,null,null,"can't delete this element");
         }
         $delete = $reel->forceDelete();
-
         return $delete ? $this->finalResponse('success',200,'data deleted successfully',null,null) :
             $this->finalResponse('failed',400,null,null,"some thing wrong happen");
     }
-
+    
     // view deleted
     public function ArchivedProfileReels(Request $request)
     {
@@ -128,17 +121,13 @@ class ReelsProfileController extends Controller
         $perPage = $request->input('per_page', 9);
         try {
             $reels = Reel::users($user->id)->onlyTrashed()->paginate($perPage);
-
             $pagination = HelpersFunctions::pagnationResponse($reels);
-
         return $reels ?
             $this->finalResponse('success',200,DeletedReelsResource::collection($reels->items()),$pagination) :
             $this->finalResponse('success',204,'no data found');
-
         } catch (\Throwable $th) {
-            return $this->finalResponse('failed',500,null,null,'somthing happen in server'.$th->getMessage());
+            return $this->finalResponse('failed',500,null,null,'somthing happen in server '. $th->getMessage());
         }
     }
-
 
 }

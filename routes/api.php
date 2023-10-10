@@ -83,13 +83,15 @@ Route::group(['middleware'=>'auth','prefix'=>'profile/reels'],function () {
 
 Route::group(['middleware'=>'auth','prefix'=>'reels/{id}'],function () {
     Route::post('view',[ReelsController::class,'viewReel'])->middleware('checkviewreel'); // working
-    Route::post('like',[ReelsController::class,'likeReels']); // finshed
-    Route::delete('unlike',[ReelsController::class,'unlikeReels']); // finshed
-    Route::post('save',[ReelsController::class,'saveReels']); // finshed
-    Route::delete('unsave',[ReelsController::class,'unsaveReels']); // finshed
-    // Route::post('share',[ReelsController::class,'shareReels']); // working
-    Route::post('report',[ReelsController::class,'reportReel']); // working
-    Route::get('comments',[ReelsController::class,'viewComentOnReels']); // finshed
+    Route::group(['middleware'=> 'checkreelexist'],function () {
+        Route::post('like',[ReelsController::class,'likeReels']); // finshed
+        Route::delete('unlike',[ReelsController::class,'unlikeReels']); // finshed
+        Route::post('save',[ReelsController::class,'saveReels']); // finshed
+        Route::delete('unsave',[ReelsController::class,'unsaveReels']); // finshed
+        // Route::post('share',[ReelsController::class,'shareReels']); // working
+        Route::post('report',[ReelsController::class,'reportReel']); // finshed
+        Route::get('comments',[ReelsController::class,'viewComentOnReels']); // finshed
+    });
 
 });
 

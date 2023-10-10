@@ -71,4 +71,11 @@ class Reel extends Model
     {
         $query->where('user_id', $user->id)->where('id',$request->id);
     }
+
+    public function scopeUsers(Builder $query,$user_id): void
+    {
+        $query->where('user_id', '=', $user_id);
+    }
+
 }
+
